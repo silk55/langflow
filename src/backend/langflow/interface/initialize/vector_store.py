@@ -8,6 +8,7 @@ from langchain.vectorstores import (
     SupabaseVectorStore,
     MongoDBAtlasVectorSearch,
 )
+from langchain.vectorstores.milvus import Milvus
 from langchain.schema import Document
 import os
 
@@ -86,6 +87,45 @@ def initialize_supabase(class_object: Type[SupabaseVectorStore], params: dict):
 
     return class_object.from_documents(client=supabase, **params)
 
+
+def initialize_milvus(class_object: Type[Milvus], params: dict):
+    print("*"*100)
+    print(params.get("embedding"))
+    # print(params.get["texts"])
+    """ Initialize mivlus and return the class object"""
+    client_params = {
+            "host": params.get("milvus_host"),
+            "port": params.get("milvus_port"),
+            "user": params.get("milvus_user"),
+            "password": params.get("milvus_password"),
+            "secure": False,
+    }
+    new_params = {
+            "collection_name": params.get("collection_name"),
+            "embedding_function": params.get("embedding"),
+            "connection_args": client_params,
+        }
+    if not docs_in_params(params):   
+        return class_object(**new_params)
+    # If there are docs in the params, create a new index
+    new_params["embedding"] = new_params.pop("embedding_function")
+    new_params.pop("collection_name")
+    if "texts" in params:
+        new_params["documents"] = params.get("texts")
+    for doc in params["documents"]:
+        if not isinstance(doc, Document):
+            # remove any non-Document objects from the list
+            params["documents"].remove(doc)
+            continue
+        if doc.metadata is None:
+            doc.metadata = {}
+        for key, value in doc.metadata.items():
+            if value is None:
+                doc.metadata[key] = ""
+    new_params["documents"] = params.get("documents")
+
+    return class_object.from_documents(**new_params)
+        
 
 def initialize_weaviate(class_object: Type[Weaviate], params: dict):
     """Initialize weaviate and return the class object"""
@@ -246,4 +286,5 @@ vecstore_initializer: Dict[str, Callable[[Type[Any], dict], Any]] = {
     "FAISS": initialize_faiss,
     "SupabaseVectorStore": initialize_supabase,
     "MongoDBAtlasVectorSearch": initialize_mongodb,
+    "Milvus": initialize_milvus,
 }

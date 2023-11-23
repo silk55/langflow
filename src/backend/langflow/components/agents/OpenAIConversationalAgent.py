@@ -25,7 +25,8 @@ class ConversationalAgent(CustomComponent):
             "gpt-3.5-turbo-16k",
             "gpt-4",
             "gpt-4-32k",
-            "chatglm2-6b"
+            "chatglm2-6b",
+            "chatglm3-6b",
         ]
         return {
             "tools": {"is_list": True, "display_name": "Tools"},

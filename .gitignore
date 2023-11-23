@@ -257,3 +257,5 @@ src/backend/langflow/frontend/
 .docker
 
 .idea
+
+.chainlit

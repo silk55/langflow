@@ -281,7 +281,8 @@ def instantiate_toolkit(node_type, class_object: Type[BaseToolkit], params: Dict
 
 
 def instantiate_embedding(node_type, class_object, params: Dict):
-    params.pop("model", None)
+    print(params)
+    # params.pop("model", None)
     params.pop("headers", None)
 
     if "VertexAI" in node_type:

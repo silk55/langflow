@@ -22,6 +22,8 @@ BASIC_FIELDS = [
     "mongodb_atlas_cluster_uri",
     "collection_name",
     "db_name",
+    "milvus_host",
+    "milvus_port",
 ]
 ADVANCED_FIELDS = [
     "n_dim",
@@ -47,6 +49,8 @@ ADVANCED_FIELDS = [
     "chroma_server_ssl_enabled",
     "chroma_server_grpc_port",
     "chroma_server_cors_allow_origins",
+    "milvus_user",
+    "milvus_password",
 ]
 
 
@@ -88,6 +92,62 @@ class VectorStoreFrontendNode(FrontendNode):
                 value="{}",
             )
             extra_fields.extend((extra_field, extra_field2))
+        
+        elif self.template.type_name == "Milvus":
+            # Add client_kwargs field
+            extra_field1 = TemplateField(
+                name="milvus_host",
+                field_type="str",
+                required=True,
+                placeholder="localhost",
+                show=True,
+                advanced=False,
+                multiline=False,
+                value="",
+            )
+            extra_field2 = TemplateField(
+                name="milvus_port",
+                field_type="str",
+                required=True,
+                placeholder="19530",
+                show=True,
+                advanced=False,
+                multiline=False,
+                value="",
+            )
+            extra_field3 = TemplateField(
+                name="milvus_user",
+                field_type="str",
+                required=False,
+                placeholder="root",
+                show=True,
+                advanced=True,
+                multiline=False,
+                value="",
+            )
+            extra_field4 = TemplateField(
+                name="milvus_password",
+                field_type="str",
+                required=False,
+                placeholder="Milvus",
+                show=True,
+                advanced=True,
+                multiline=False,
+                value="",
+            )
+            extra_field5 = TemplateField(
+                name="collection_name",
+                field_type="str",
+                required=False,
+                placeholder="",
+                show=True,
+                advanced=True,
+                multiline=False,
+                display_name="Collection Name",
+                value="",
+            )
+            extra_fields.extend((extra_field1, extra_field2, extra_field3, extra_field4, extra_field5))
+            
 
         elif self.template.type_name == "Chroma":
             # New bool field for persist parameter
