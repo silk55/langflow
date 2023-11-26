@@ -137,6 +137,8 @@ def instantiate_based_on_type(class_object, base_type, node_type, params, user_i
 def instantiate_custom_component(node_type, class_object, params, user_id):
     # we need to make a copy of the params because we will be
     # modifying it
+    if "retriever" in params and hasattr(params["retriever"], "as_retriever"):
+        params["retriever"] = params["retriever"].as_retriever()
     params_copy = params.copy()
     class_object: "CustomComponent" = get_function_custom(params_copy.pop("code"))
     custom_component = class_object(user_id=user_id)

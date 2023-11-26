@@ -89,8 +89,6 @@ def initialize_supabase(class_object: Type[SupabaseVectorStore], params: dict):
 
 
 def initialize_milvus(class_object: Type[Milvus], params: dict):
-    print("*"*100)
-    print(params.get("embedding"))
     # print(params.get["texts"])
     """ Initialize mivlus and return the class object"""
     client_params = {
