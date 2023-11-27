@@ -13,6 +13,7 @@ CHAT_OPENAI_MODELS = [
     "gpt-3.5-turbo-16k",
     "chatglm2-6b",
     "chatglm3-6b",
+    "skylark-pro-public",
 ]
 
 
